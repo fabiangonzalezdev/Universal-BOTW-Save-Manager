@@ -1,0 +1,8 @@
+[project]
+name = "universal-botw-save-manager"
+version = "0.1.0a1"
+description = "Offline desktop save converter for Breath of the Wild on Wii U and Switch"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

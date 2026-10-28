@@ -1,0 +1,76 @@
+name: Build and release
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            platform: windows-x64
+          - os: ubuntu-22.04
+            platform: linux-x64
+          - os: macos-14
+            platform: macos-arm64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Linux Tk and display
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y python3-tk xvfb
+      - run: python -m pip install -r requirements-build.txt
+      - run: python -m unittest discover -s tests -v
+      - name: UI smoke test (Linux)
+        if: runner.os == 'Linux'
+        run: xvfb-run -a python main.py --smoke-test
+      - name: UI smoke test
+        if: runner.os != 'Linux'
+        run: python main.py --smoke-test
+      - run: python build.py
+      - name: Verify packaged Windows resources
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $p = Start-Process -FilePath '.\dist\Universal-BOTW-Save-Manager.exe' -ArgumentList '--self-test' -Wait -PassThru -WindowStyle Hidden
+          if ($p.ExitCode -ne 0) { throw 'Packaged self-test failed' }
+      - name: Verify packaged Linux resources
+        if: runner.os == 'Linux'
+        run: ./dist/Universal-BOTW-Save-Manager --self-test
+      - name: Archive
+        shell: python
+        run: |
+          import hashlib, pathlib, shutil
+          suffix = '${{ matrix.platform }}'
+          release = pathlib.Path('release'); release.mkdir(exist_ok=True)
+          app = pathlib.Path('dist')
+          for file in ['README.md', 'README.es.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md']:
+              shutil.copy(file, app / file)
+          name = f'Universal-BOTW-Save-Manager-{suffix}'
+          archive = pathlib.Path(shutil.make_archive(str(release/name), 'zip', app))
+          (release/f'{name}.sha256').write_text(hashlib.sha256(archive.read_bytes()).hexdigest()+'  '+archive.name+'\n')
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.platform }}
+          path: release/*
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: release
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          prerelease: true
+          generate_release_notes: true
+          files: release/*

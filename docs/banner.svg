@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300">
+<rect width="1200" height="300" rx="20" fill="#101920"/>
+<path d="M0 250 Q240 110 460 230 T900 190 T1200 230V300H0" fill="#192e34"/>
+<circle cx="1060" cy="120" r="65" stroke="#c8ac6c" stroke-width="2" fill="none"/>
+<path d="M1025 120h70m-20-20 20 20-20 20m-30-40-20 20 20 20" stroke="#c8ac6c" stroke-width="4" fill="none"/>
+<text x="65" y="83" fill="#c8ac6c" font-family="sans-serif" font-size="16" letter-spacing="5">YOUR ADVENTURE. ACROSS PLATFORMS.</text>
+<text x="60" y="151" fill="#eef4ed" font-family="sans-serif" font-size="46" font-weight="bold">Universal-BOTW-Save Manager</text>
+<text x="65" y="199" fill="#a6b6bf" font-family="sans-serif" font-size="23">Wii U  ↔  Nintendo Switch  ·  Offline  ·  Windows first</text>
+</svg>
