@@ -13,7 +13,7 @@ from botw_manager.settings import LANGUAGES, Target
 
 def main():
     with tempfile.TemporaryDirectory() as tmp:
-        root=Path(tmp)
+        root=Path(tmp).resolve()
         source, template, destination=(root/n for n in ('source 日本語','template','emulator-save'))
         backup(source, '>');backup(template, '<');backup(destination, '<')
         app=App(config=root/'local-config.json')

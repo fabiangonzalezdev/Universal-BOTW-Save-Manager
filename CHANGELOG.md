@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.0-alpha.2 — 2026-10-28
+
+- Normalize temporary-path expectations in Windows/macOS tests (short names and /private aliases). Application path resolution remains unchanged.
+- Includes all multilingual UI and optional save-delivery features from alpha.1.
+
 ## 0.2.0-alpha.1 — 2026-10-28
 
 - Native-name language selector: English, Français, Deutsch, 日本語, Español, Português (Brasil).

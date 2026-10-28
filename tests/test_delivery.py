@@ -56,8 +56,8 @@ class DeliveryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             p = Path(tmp)/"save 日本語"
             backup(p, ">")
-            self.assertEqual(save_input(p/"0/game_data.sav"), p)
-            self.assertEqual(save_input(p/"option.sav"), p)
+            self.assertEqual(save_input(p/"0/game_data.sav"), p.resolve())
+            self.assertEqual(save_input(p/"option.sav"), p.resolve())
             lone = Path(tmp)/"game_data.sav"
             lone.write_bytes(fixture("<"))
             with self.assertRaises(SaveError):save_input(lone)
@@ -68,7 +68,7 @@ class DeliveryTests(unittest.TestCase):
             backup(game/"save", "<")
             (game/"game.bin").write_bytes(b'keep')
             target = Target("Savage Wind", str(game), kind="Savage Wind")
-            self.assertEqual(resolve_target(target, "Switch"), game/"save")
+            self.assertEqual(resolve_target(target, "Switch"), (game/"save").resolve())
             self.assertEqual((game/"game.bin").read_bytes(), b'keep')
 
     def test_savage_wind_save_profile_and_backup_siblings(self):
@@ -77,11 +77,11 @@ class DeliveryTests(unittest.TestCase):
             backup(game/"save/save_0", "<")
             backup(game/"save/save_0.ubsm-backup-old", "<")
             target=Target("Savage Wind",str(game),kind="Savage Wind")
-            self.assertEqual(resolve_target(target,"Switch"),game/"save/save_0")
+            self.assertEqual(resolve_target(target,"Switch"),(game/"save/save_0").resolve())
             backup(game/"save/save_1","<")
             with self.assertRaises(SaveError):resolve_target(target,"Switch")
             target.path=str(game/"save/save_0")
-            self.assertEqual(resolve_target(target,"Switch"),game/"save/save_0")
+            self.assertEqual(resolve_target(target,"Switch"),(game/"save/save_0").resolve())
 
     def test_savage_wind_empty_save_root_requires_initialization(self):
         with tempfile.TemporaryDirectory() as tmp:

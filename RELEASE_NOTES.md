@@ -1,4 +1,4 @@
-# Universal-BOTW-Save Manager v0.2.0-alpha.1
+# Universal-BOTW-Save Manager v0.2.0-alpha.2
 
 ## New
 
