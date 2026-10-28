@@ -6,7 +6,7 @@ import zipfile
 root=Path(__file__).parent
 out=root/'dist'/'Universal-BOTW-Save-Manager-windows-x64.zip'
 files=['dist/Universal-BOTW-Save-Manager.exe','README.md','README.es.md','LICENSE','THIRD_PARTY_NOTICES.md',
-       'docs/FORMAT.md','botw_manager/data/LICENSE.hashes']
+       'docs/FORMAT.md','docs/banner.svg','botw_manager/data/LICENSE.hashes']
 with zipfile.ZipFile(out,'w',zipfile.ZIP_DEFLATED) as z:
     for f in files:
         p=root/f
