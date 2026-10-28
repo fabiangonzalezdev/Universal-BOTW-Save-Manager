@@ -30,10 +30,14 @@ jobs:
       - run: python -m unittest discover -s tests -v
       - name: UI smoke test (Linux)
         if: runner.os == 'Linux'
-        run: xvfb-run -a python main.py --smoke-test
+        run: |
+          xvfb-run -a python main.py --smoke-test
+          xvfb-run -a python tests/gui_smoke.py
       - name: UI smoke test
         if: runner.os != 'Linux'
-        run: python main.py --smoke-test
+        run: |
+          python main.py --smoke-test
+          python tests/gui_smoke.py
       - run: python build.py
       - name: Verify packaged Windows resources
         if: runner.os == 'Windows'
@@ -53,6 +57,10 @@ jobs:
           app = pathlib.Path('dist')
           for file in ['README.md', 'README.es.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md']:
               shutil.copy(file, app / file)
+          shutil.copytree('docs', app/'docs', dirs_exist_ok=True)
+          notices = app/'third-party-licenses'; notices.mkdir(exist_ok=True)
+          for license in pathlib.Path('botw_manager/data').glob('LICENSE.*'):
+              shutil.copy(license, notices/license.name)
           name = f'Universal-BOTW-Save-Manager-{suffix}'
           archive = pathlib.Path(shutil.make_archive(str(release/name), 'zip', app))
           (release/f'{name}.sha256').write_text(hashlib.sha256(archive.read_bytes()).hexdigest()+'  '+archive.name+'\n')

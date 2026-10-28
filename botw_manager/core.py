@@ -203,7 +203,7 @@ def convert(source: Path, template: Path, output: Path, allow_version_change=Fal
             converted = original
         plan.append((rel, converted, digest(original), p))
         if progress:
-            progress(i+1, len(files), rel.as_posix())
+            progress(i+1, 2*len(files)+1, rel.as_posix())
     if experimental and not allow_version_change:
         raise SaveError("Different game versions/schema: enable experimental cross-version conversion after reviewing the preview.")
     option_path = dst["root"] / "option.sav"
@@ -218,13 +218,15 @@ def convert(source: Path, template: Path, output: Path, allow_version_change=Fal
         stage = Path(tmp) / "result"
         payload = stage / "user-save"
         payload.mkdir(parents=True)
-        for rel, data, original_hash, original_path in plan:
+        for written, (rel, data, original_hash, original_path) in enumerate(plan, 1):
             dest = payload / rel
             dest.parent.mkdir(parents=True, exist_ok=True)
             dest.write_bytes(data)
             if digest(dest.read_bytes()) != digest(data) or digest(original_path.read_bytes()) != original_hash:
                 raise SaveError("File integrity check failed; source may have changed during conversion.")
             report["files"].append({"file": rel.as_posix(), "source_sha256": original_hash, "output_sha256": digest(data)})
+            if progress:
+                progress(len(files)+written, 2*len(files)+1, rel.as_posix())
         (payload / "option.sav").write_bytes(option)
         if option_path.read_bytes() != option:
             raise SaveError("Destination options changed during conversion.")
@@ -233,4 +235,6 @@ def convert(source: Path, template: Path, output: Path, allow_version_change=Fal
         if output.exists():
             raise SaveError("Output appeared during conversion; refusing overwrite.")
         os.rename(stage, output)
+    if progress:
+        progress(2*len(files)+1, 2*len(files)+1, 'completed')
     return report

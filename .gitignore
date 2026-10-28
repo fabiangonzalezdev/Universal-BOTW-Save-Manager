@@ -11,3 +11,6 @@ otp.bin
 seeprom.bin
 prodinfo.bin
 *.log
+*.ubsm-backup-*/
+copy-report.json
+conversion-report.json

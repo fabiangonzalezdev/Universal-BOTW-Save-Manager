@@ -9,6 +9,8 @@
 
 ## Primeros pasos
 
+En el selector aparecen **English, Français, Deutsch, 日本語, Español y Português (Brasil)**. Elegí un idioma y la tarjeta **Wii U → Switch** o **Switch → Wii U**. La elección del idioma se guarda localmente. Podés arrastrar un save de un respaldo completo sobre cada entrada o elegirlo con los botones.
+
 1. Descargá el ZIP **Windows x64** de Releases, extraelo y ejecutá `Universal-BOTW-Save-Manager.exe`. El ejecutable empaquetado no requiere Python y no tiene firma digital.
 2. En **Respaldo de origen**, seleccioná tu carpeta de usuario exportada con Checkpoint, JKSV o SaveMii. Debe contener `option.sav` y ranuras como `0/game_data.sav`. Si hay varios usuarios, elegí el correcto.
 3. En **Respaldo de destino**, elegí una partida nativa de la otra plataforma y de la versión que vas a usar. Es obligatoria: aporta estructura y opciones. No se mezcla su progreso con la partida de origen; solo los campos nuevos identificados que falten se inicializan con sus valores.
@@ -30,6 +32,12 @@
 > [!WARNING]
 > Que la estructura coincida no demuestra que el juego vaya a cargar la partida. Usá las actualizaciones y DLC necesarios, y validá dentro del juego antes de reemplazar tus respaldos de seguridad.
 
+## Emuladores y ports
+
+En **Configuración · Otras rutas** agregá Ryujinx, Eden, Savage Wind, Cemu o un destino personalizado. Después de convertir, la app muestra las rutas del formato correcto y pregunta si querés copiar. Cerrá los juegos antes de aceptar. Hay una barra independiente de copia; cada save anterior queda en una carpeta vecina `.ubsm-backup-...`. Se verifican hashes y se intenta restaurar el original si falla el reemplazo.
+
+Para Savage Wind se detecta `save/` o un único perfil `save/save_N/`; si hay varios perfiles hay que elegir uno. [Guía de configuración, copia y recuperación](docs/DESTINATIONS.md). Las rutas personales quedan fuera del repositorio y los paquetes.
+
 ## Compatibilidad
 
 Windows 10/11 x64 es la prioridad. macOS ARM64 y Linux x64 tienen builds configurados en GitHub Actions: su disponibilidad depende de los resultados de compilación y los assets publicados. No se probaron localmente en esas plataformas.
@@ -44,6 +52,8 @@ python -m venv .venv
 # macOS/Linux: source .venv/bin/activate
 python -m pip install -r requirements-build.txt
 python -m unittest discover -s tests -v
+# Linux: xvfb-run -a python tests/gui_smoke.py
+# Windows/macOS: python tests/gui_smoke.py
 python main.py
 python build.py
 ```

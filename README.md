@@ -16,12 +16,17 @@ Convert **Wii U → Switch** or **Switch → Wii U** using a native backup from 
 - Numbered save slots, screenshots, album, compendium and Hero's Path blocks.
 - Preserves hearts, stamina, inventory and other shared record values; this is not a stat editor.
 - Keeps `option.sav` from the destination backup.
-- Bilingual English/Spanish interface; no accounts, telemetry, console keys or network needed by the app.
+- Six-language interface: **English, Français, Deutsch, 日本語, Español, Português (Brasil)**; the selected language is saved locally.
+- Native file/folder drag-and-drop and explicit Wii U → Switch / Switch → Wii U console cards.
+- Optional, confirmed copying to configured emulator/port save folders with separate progress and backups.
+- No accounts, telemetry, console keys or network needed by the app.
 
 > [!WARNING]
 > Cross-version conversion is **experimental and disabled by default**. The five identified newer Switch fields can be removed when absent from the destination, or initialized from the destination template when missing from the source. Other schema differences are rejected. Neither a successful conversion nor a matching header proves that the game will load the save.
 
 ## Getting started
+
+Choose your language in the dropdown, then select one of the two conversion cards. You can choose a folder or drop a save from a complete backup onto either input.
 
 1. Download the **Windows x64 ZIP** from [Releases](https://github.com/fabiangonzalezdev/Universal-BOTW-Save-Manager/releases), extract it and launch `Universal-BOTW-Save-Manager.exe`. Python is not required for packaged builds. Builds are unsigned.
 2. **Source backup:** choose your extracted user folder, containing `option.sav` and numbered slots such as `0/game_data.sav`. If a SaveMii backup includes several users, select the intended user explicitly.
@@ -30,6 +35,12 @@ Convert **Wii U → Switch** or **Switch → Wii U** using a native backup from 
 5. Click **Inspect backups**. Review direction, game version, hearts and stamina. Enable experimental conversion only when deliberately changing versions.
 6. Click **Convert save**. Read `conversion-report.json`; restore the contents of `user-save/` with your console save manager using a new backup slot and the correct user. The app does not write to console storage or upload Nintendo Cloud saves.
 7. Load the game and check your progress before making a new in-game save. Retain the original backups until the destination has been validated.
+
+## Emulators and PC ports
+
+Open **Settings · Other paths** to configure Ryujinx, Eden, Savage Wind, Cemu or custom save folders. After conversion, the app asks whether to copy to matching enabled targets. Close the games first. A full previous-save backup is retained next to each destination before replacement, and `copy-report.json` records the outcome. For Savage Wind, game-folder selection resolves `save/` or a unique `save/save_N/` profile; multiple profiles require an explicit selection.
+
+See the [configuration and copy guide (EN/ES)](docs/DESTINATIONS.md) for exact steps, rollback and config-file locations. Personal paths are never bundled in releases.
 
 ## What you need
 
@@ -44,7 +55,8 @@ Tears of the Kingdom is not supported. Do not select `progress.sav`, raw encrypt
 
 | Component | Status | Meaning |
 |---|---|---|
-| Windows desktop interface | Implemented | Native Tk interface; source UI smoke-tested locally |
+| Windows desktop interface | Implemented | Six languages, native drops, direction cards and two progress bars |
+| Optional emulator/port copying | Implemented | Confirmation, hashes, previous-save backups and rollback; synthetic tests |
 | Wii U ↔ Switch shared records | Implemented | Uses destination schema and preserves string byte order |
 | Newer Switch → Wii U 1.5 | Experimental | Five identified extra fields; opt-in required |
 | Wii U → newer Switch | Experimental | Five identified missing fields use destination values |
@@ -64,6 +76,8 @@ python -m venv .venv
 # macOS/Linux: source .venv/bin/activate
 python -m pip install -r requirements-build.txt
 python -m unittest discover -s tests -v
+# Linux: xvfb-run -a python tests/gui_smoke.py
+# Windows/macOS: python tests/gui_smoke.py
 python main.py
 python build.py
 ```
