@@ -1,3 +1,7 @@
+# v0.3.0-alpha.1
+
+Brown cloud interface, bundled Open Sans, gold console silhouettes, multi-profile BOTW discovery, Cemu copy confirmation and final output-folder prompt. See docs/DISCOVERY.md for search scope.
+
 # Changelog
 
 ## 0.2.1-alpha.1 — 2026-10-28

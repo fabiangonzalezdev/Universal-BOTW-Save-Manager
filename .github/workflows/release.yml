@@ -43,11 +43,12 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $p = Start-Process -FilePath '.\dist\Universal-BOTW-Save-Manager.exe' -ArgumentList '--self-test' -Wait -PassThru -WindowStyle Hidden
+          $exe = (Get-ChildItem 'dist/v*/Universal-BOTW-Save-Manager.exe' | Select-Object -First 1).FullName
+          $p = Start-Process -FilePath $exe -ArgumentList '--self-test' -Wait -PassThru -WindowStyle Hidden
           if ($p.ExitCode -ne 0) { throw 'Packaged self-test failed' }
       - name: Verify packaged Linux resources
         if: runner.os == 'Linux'
-        run: ./dist/Universal-BOTW-Save-Manager --self-test
+        run: ./dist/v*/Universal-BOTW-Save-Manager --self-test
       - name: Package versioned release
         run: python package_release.py --platform ${{ matrix.platform }}
       - uses: actions/upload-artifact@v4

@@ -18,11 +18,37 @@ from . import settings as preferences
 from .settings import LANGUAGES, KINDS, Target
 from .i18n import text
 
-BG, PANEL, TEXT, MUTED, ACCENT = "#101920", "#192630", "#eef4ed", "#a6b6bf", "#c8ac6c"
+BG, PANEL, TEXT, MUTED, ACCENT = "#160C0C", "#241714", "#F9F5DA", "#B8A58A", "#A9905B"
+
+
+def clouds(canvas):
+    """Original low-contrast cloud contours; no downloaded game artwork."""
+    import math
+    for cx in range(-80, max(canvas.winfo_width(), 500)+160, 160):
+        for cy in (-15, 100):
+            for radius in (18, 29, 42, 57, 75):
+                points=[]
+                for step in range(49):
+                    a=step*math.pi*2/48
+                    points.extend((cx+math.cos(a)*radius*1.8,cy+math.sin(a)*radius*.65))
+                canvas.create_line(*points,fill="#30221B",width=1,smooth=True)
+
+
+class CloudFrame(tk.Frame):
+    def __init__(self, parent, light=False, **kwargs):
+        super().__init__(parent, **kwargs)
+        self.cloud_image=tk.PhotoImage(file=str(Path(__file__).parent / "data" / ("clouds-light.png" if light else "clouds.png")))
+        self.cloud_label=tk.Label(self,image=self.cloud_image,bd=0,anchor="nw")
+        self.cloud_label.place(x=0,y=0,relwidth=1,relheight=1)
+        self.cloud_label.lower()
 
 
 class App(TkinterDnD.Tk):
     def __init__(self, config=None):
+        # Private process font registration; never changes Windows font settings.
+        if sys.platform == "win32":
+            import ctypes
+            ctypes.windll.gdi32.AddFontResourceExW(str(Path(__file__).parent / "data" / "OpenSans.ttf"), 0x10, 0)
         super().__init__()
         self.title("Universal-BOTW-Save Manager")
         icon_dir = Path(__file__).parent / "data"
@@ -71,13 +97,13 @@ class App(TkinterDnD.Tk):
         return "Switch" if self.direction == "Wii U" else "Wii U"
 
     def label(self, parent, value, size=10, color=TEXT, **kwargs):
-        font = "Yu Gothic UI" if self.settings.language == "ja" else "Segoe UI"
+        font = "Yu Gothic UI" if self.settings.language == "ja" else "Open Sans"
         return tk.Label(parent, text=value, bg=parent["bg"], fg=color, font=(font, size), **kwargs)
 
     def button(self, parent, title, command, primary=False):
-        btn = tk.Button(parent, text=title, command=command, bg=ACCENT if primary else "#2c404c", fg=BG if primary else TEXT,
+        btn = tk.Button(parent, text=title, command=command, bg=ACCENT if primary else "#44342A", fg=BG if primary else TEXT,
                         activebackground="#dfc88d", activeforeground=BG, relief="flat", bd=0,
-                        padx=12, pady=8, cursor="hand2", font=("Segoe UI", 10, "bold"))
+                        padx=12, pady=8, cursor="hand2", font=("Open Sans", 10, "bold"))
         if parent.winfo_toplevel() is self:
             self.controls.append(btn)
         return btn
@@ -89,9 +115,9 @@ class App(TkinterDnD.Tk):
         style = ttk.Style(self)
         style.theme_use("clam")
         style.configure("TProgressbar", background=ACCENT, troughcolor=PANEL)
-        head = tk.Frame(self, bg=BG, padx=24, pady=15)
+        head = CloudFrame(self, light=True, bg="#F9F5DA", padx=24, pady=15)
         head.pack(fill="x")
-        right = tk.Frame(head, bg=BG)
+        right = tk.Frame(head, bg="#F9F5DA")
         right.pack(side="right", anchor="n")
         self.label(right, self.t("language"), 9, MUTED).pack(anchor="w")
         self.language_box = ttk.Combobox(right, textvariable=self.language, values=list(LANGUAGES.values()), state="readonly", width=21)
@@ -99,7 +125,11 @@ class App(TkinterDnD.Tk):
         self.language_box.bind("<<ComboboxSelected>>", self.change_language)
         self.controls.append(self.language_box)
         self.label(head, "UNIVERSAL / BOTW", 10, ACCENT).pack(anchor="w")
-        self.label(head, self.t("tagline"), 22).pack(anchor="w", pady=(5, 0))
+        self.label(head, self.t("tagline"), 22, BG).pack(anchor="w", pady=(5, 0))
+        nav = tk.Frame(self, bg="#E5DBC0", padx=24, pady=5)
+        nav.pack(fill="x")
+        self.button(nav, "⌂  "+self.t("conversion"), lambda: None).pack(side="left", padx=(0, 6))
+        self.button(nav, "▱  "+self.t("settings"), self.paths_dialog).pack(side="left")
         # Scrollable main surface keeps long translations usable on short displays.
         outer = tk.Frame(self, bg=BG)
         outer.pack(fill="both", expand=True)
@@ -108,7 +138,7 @@ class App(TkinterDnD.Tk):
         scroll.pack(side="right", fill="y")
         self.surface.pack(side="left", fill="both", expand=True)
         self.surface.configure(yscrollcommand=scroll.set)
-        content = tk.Frame(self.surface, bg=BG, padx=24)
+        content = CloudFrame(self.surface, bg=BG, padx=24)
         content_window = self.surface.create_window((0, 0), window=content, anchor="nw")
         content.bind("<Configure>", lambda e: self.surface.configure(scrollregion=self.surface.bbox("all")))
         self.surface.bind("<Configure>", lambda e: self.surface.itemconfigure(content_window, width=e.width))
@@ -124,7 +154,7 @@ class App(TkinterDnD.Tk):
             card.bind("<Return>", lambda e, s=source: self.choose_direction(s))
             card.bind("<space>", lambda e, s=source: self.choose_direction(s))
             self.cards.append((card, source))
-        body = tk.Frame(content, bg=PANEL, padx=18, pady=14)
+        body = tk.Frame(content, bg=PANEL, padx=18, pady=14, highlightbackground=ACCENT, highlightthickness=1)
         body.pack(fill="x")
         self.label(body, self.t("backups"), 10, ACCENT).pack(anchor="w", pady=(0, 10))
         for key in ("source", "template", "output"):
@@ -137,7 +167,7 @@ class App(TkinterDnD.Tk):
             entryrow = tk.Frame(row, bg=PANEL)
             entryrow.pack(fill="x")
             entry = tk.Entry(entryrow, textvariable=self.vars[key], bg=BG, fg=TEXT, insertbackground=TEXT,
-                             relief="flat", font=("Segoe UI", 10))
+                             relief="flat", font=("Open Sans", 10))
             entry.pack(side="left", fill="x", expand=True, ipady=8)
             self.controls.append(entry)
             self.button(entryrow, self.t("browse"), lambda k=key: self.browse(k)).pack(side="left", padx=(7, 0))
@@ -147,7 +177,7 @@ class App(TkinterDnD.Tk):
                     widget.drop_target_register(DND_FILES)
                     widget.dnd_bind("<<Drop>>", lambda e, k=key: self.on_drop(e, k))
         self.check = tk.Checkbutton(body, text=self.t("experimental"), variable=self.experimental, bg=PANEL, fg=MUTED,
-                                   selectcolor=BG, activebackground=PANEL, activeforeground=TEXT, font=("Segoe UI", 10), anchor="w")
+                                   selectcolor=BG, activebackground=PANEL, activeforeground=TEXT, font=("Open Sans", 10), anchor="w")
         self.check.pack(anchor="w")
         self.controls.append(self.check)
         actions = tk.Frame(content, bg=BG)
@@ -200,31 +230,43 @@ class App(TkinterDnD.Tk):
         self.set_busy(self.busy)
 
     def icon(self, canvas, platform, x, y, color):
-        # Original schematic silhouettes, not Nintendo logos or downloaded art.
+        # Original one-colour console silhouettes with negative-space controls.
+        color = ACCENT
+        bg = canvas["bg"]
         if platform == "Wii U":
-            canvas.create_rectangle(x-29, y-16, x+29, y+16, outline=color, width=2)
-            canvas.create_rectangle(x-15, y-11, x+15, y+11, outline=color, width=2)
-            canvas.create_line(x-25, y, x-19, y, fill=color, width=2)
-            canvas.create_line(x-22, y-3, x-22, y+3, fill=color, width=2)
-            canvas.create_oval(x+19, y-4, x+23, y, outline=color, fill=color)
-            canvas.create_oval(x+23, y+1, x+27, y+5, outline=color, fill=color)
+            canvas.create_polygon(x-26,y-23,x+25,y-23,x+33,y-15,x-18,y-15,fill=color)
+            canvas.create_rectangle(x-26,y-23,x-18,y-15,fill=color,outline=color)
+            canvas.create_line(x-19,y-20,x+17,y-20,fill=bg,width=2)
+            canvas.create_polygon(x-33,y-11,x-29,y-17,x+29,y-17,x+33,y-11,x+33,y+16,x+27,y+21,x-27,y+21,x-33,y+16,fill=color,smooth=True)
+            canvas.create_rectangle(x-19,y-11,x+19,y+13,fill=bg,outline=bg)
+            canvas.create_oval(x-29,y-10,x-23,y-4,fill=bg,outline=bg)
+            canvas.create_line(x-29,y+6,x-23,y+6,fill=bg,width=2)
+            canvas.create_line(x-26,y+3,x-26,y+9,fill=bg,width=2)
+            for dx,dy in ((26,-4),(23,0),(29,0),(26,4)):
+                canvas.create_oval(x+dx-1,y+dy-1,x+dx+1,y+dy+1,fill=bg,outline=bg)
+            canvas.create_oval(x+23,y+9,x+29,y+15,fill=bg,outline=bg)
         else:
-            canvas.create_rectangle(x-15, y-16, x+15, y+16, outline=color, width=2)
-            canvas.create_rectangle(x-28, y-16, x-19, y+16, outline=color, width=2)
-            canvas.create_rectangle(x+19, y-16, x+28, y+16, outline=color, width=2)
-            canvas.create_oval(x-26, y-10, x-22, y-6, outline=color, fill=color)
-            canvas.create_oval(x+22, y+5, x+26, y+9, outline=color, fill=color)
+            canvas.create_rectangle(x-21,y-17,x+21,y+17,fill=color,outline=color)
+            canvas.create_rectangle(x-18,y-14,x+18,y+14,fill=bg,outline=bg)
+            for sign in (-1,1):
+                canvas.create_polygon(x+sign*23,y-18,x+sign*31,y-18,x+sign*35,y-12,x+sign*35,y+12,x+sign*31,y+18,x+sign*23,y+18,fill=color,smooth=True)
+            for dx,dy in ((-29,-8),(29,8)):
+                canvas.create_oval(x+dx-3,y+dy-3,x+dx+3,y+dy+3,fill=bg,outline=bg)
+            for dx,dy in ((-29,7),(29,-7)):
+                canvas.create_line(x+dx-3,y+dy,x+dx+3,y+dy,fill=bg,width=2)
+                canvas.create_line(x+dx,y+dy-3,x+dx,y+dy+3,fill=bg,width=2)
 
     def draw_card(self, canvas, source):
         canvas.delete("all")
         selected = source == self.direction
-        color = ACCENT if selected else MUTED
-        canvas.configure(highlightbackground=color if selected else PANEL)
+        color = ACCENT
+        canvas.configure(highlightbackground=color if selected else "#49392B")
+        clouds(canvas)
         width = canvas.winfo_width()
         self.icon(canvas, source, width/2-92, 36, color)
         self.icon(canvas, "Switch" if source == "Wii U" else "Wii U", width/2+92, 36, color)
-        canvas.create_text(width/2, 36, text="→", fill=color, font=("Segoe UI", 23))
-        canvas.create_text(width/2, 80, text=f"{source}  →  {'Switch' if source == 'Wii U' else 'Wii U'}", fill=TEXT, font=("Segoe UI", 13, "bold"))
+        canvas.create_text(width/2, 36, text="→", fill=color, font=("Open Sans", 23))
+        canvas.create_text(width/2, 80, text=f"{source}  →  {'Switch' if source == 'Wii U' else 'Wii U'}", fill=TEXT, font=("Open Sans", 13, "bold"))
 
     def input_changed(self, *_):
         if not self.busy:
@@ -353,10 +395,12 @@ class App(TkinterDnD.Tk):
             plans = plan_targets(self.settings.targets, payload, platform, (self.last_output, *self.last_protected))
             if not plans:
                 self.write(self.t("no_targets", platform=platform))
+                self.offer_open()
                 return
             names = "\n".join(f"• {target.name}\n  {dest}" for target, dest in plans)
-            question = self.t("copy_question", platform=platform)+"\n\n"+names+"\n\n"+self.t("copy_warning")
+            question = (self.t("cemu_question") if platform == "Wii U" and any(t.kind == "Cemu" for t, _ in plans) else self.t("copy_question", platform=platform))+"\n\n"+names+"\n\n"+self.t("copy_warning")
             if not messagebox.askyesno(self.t("copy_title"), question, parent=self):
+                self.offer_open()
                 return
             targets = deepcopy([target for target, _ in plans])
             output, protected = self.last_output, self.last_protected
@@ -390,6 +434,8 @@ class App(TkinterDnD.Tk):
                     self.write(self.t("done", count=len(result["files"]), path=self.last_output))
                     if any(t.enabled and t.platform == result["target_platform"] for t in self.settings.targets):
                         self.after(150, self.ask_copy)
+                    else:
+                        self.after(150, self.offer_open)
                 elif kind == "copied":
                     success = bool(data) and all(item["success"] for item in data)
                     self.copy_state = "copied" if success else "failed"
@@ -401,6 +447,8 @@ class App(TkinterDnD.Tk):
                         self.write(self.t("copy_success", name=item["name"], backup=item["backup"]) if item["success"] else self.t("copy_failure", name=item["name"], error=item["error"]))
                     if not success:
                         self.report_error(self.t("copy_partial"))
+                    else:
+                        self.after(150, self.offer_open)
                 else:
                     key = "copy" if kind == "copy_error" else "conversion"
                     if key == "copy":
@@ -420,12 +468,16 @@ class App(TkinterDnD.Tk):
             return
         PathsDialog(self)
 
+    def offer_open(self):
+        if self.last_output and messagebox.askyesno(self.t("open"), self.t("open_question")+"\n\n"+str(self.last_output / "user-save"), parent=self):
+            self.open_result()
+
     def open_result(self):
         if self.last_output:
             if sys.platform == "win32":
-                os.startfile(str(self.last_output))
+                os.startfile(str(self.last_output / "user-save"))
             else:
-                subprocess.Popen(["open" if sys.platform == "darwin" else "xdg-open", str(self.last_output)])
+                subprocess.Popen(["open" if sys.platform == "darwin" else "xdg-open", str(self.last_output / "user-save")])
 
     def close(self):
         if self.busy:
@@ -440,10 +492,19 @@ class PathsDialog(tk.Toplevel):
         self.app, self.targets = app, deepcopy(app.settings.targets)
         self.t = app.t
         self.title(self.t("settings"))
-        self.geometry("940x450")
-        self.minsize(760, 400)
+        self.geometry("1040x760")
+        self.minsize(860, 600)
         self.configure(bg=PANEL, padx=16, pady=16)
+        self.cloud_image=tk.PhotoImage(file=str(Path(__file__).parent / "data" / "clouds.png"))
+        self.cloud_label=tk.Label(self,image=self.cloud_image,bd=0,anchor="nw")
+        self.cloud_label.place(x=0,y=0,relwidth=1,relheight=1)
+        self.cloud_label.lower()
+        nav=tk.Frame(self,bg="#F9F5DA",padx=12,pady=8)
+        nav.pack(fill="x",pady=(0,12))
+        app.button(nav,"⌂  "+self.t("conversion"),self.destroy).pack(side="left")
+        app.label(nav,self.t("settings"),14,ACCENT).pack(side="left",padx=16)
         self.transient(app)
+        self.geometry(app.geometry())
         self.grab_set()
         app.label(self, self.t("paths_help"), 10, MUTED, wraplength=880, justify="left").pack(anchor="w", pady=(0, 12))
         self.tree = ttk.Treeview(self, columns=("enabled", "name", "kind", "platform", "path"), show="headings", height=8, selectmode="browse")
@@ -459,6 +520,63 @@ class PathsDialog(tk.Toplevel):
         app.button(actions, self.t("save"), self.save, True).pack(side="right")
         app.button(actions, self.t("cancel"), self.destroy).pack(side="right", padx=8)
         app.label(self, self.t("settings_location", path=app.config_file), 9, MUTED, wraplength=880, justify="left").pack(anchor="w")
+        self.detected = []
+        toolbar = tk.Frame(self, bg=PANEL)
+        toolbar.pack(fill="x", pady=8)
+        app.button(toolbar, self.t("scan_common"), lambda: self.scan(None)).pack(side="left")
+        app.button(toolbar, self.t("scan_folder"), self.pick_scan).pack(side="left", padx=8)
+        app.button(toolbar, self.t("add_detected"), self.add_detected).pack(side="right")
+        self.scan_status = app.label(self, self.t("scan_help"), 9, MUTED, wraplength=980, justify="left")
+        self.scan_status.pack(fill="x")
+        self.found = ttk.Treeview(self, columns=("kind", "platform", "path"), show="headings", height=5)
+        for key, width in (("kind",130),("platform",90),("path",700)):
+            self.found.heading(key,text=self.t(key)); self.found.column(key,width=width)
+        self.found.pack(fill="both", expand=True, pady=8)
+        from .discovery import EXAMPLES
+        app.label(self, self.t("examples"), 10, ACCENT).pack(anchor="w")
+        examples = tk.Text(self, height=7, bg=BG, fg=TEXT, wrap="word", relief="flat", font=("Open Sans",9))
+        examples.pack(fill="x")
+        examples.insert("end", "\n".join(f"{kind} — {value}" for kind,value in EXAMPLES))
+        examples.configure(state="disabled")
+        self.refresh()
+
+    def pick_scan(self):
+        folder = filedialog.askdirectory(parent=self, title=self.t("scan_folder"))
+        if folder:
+            self.scan([Path(folder)])
+
+    def scan(self, roots):
+        if getattr(self, "scanning", False):
+            return
+        self.scanning = True
+        self.scan_status.configure(text=self.t("scanning"))
+        result = queue.Queue()
+        def task():
+            from .discovery import scan, common_roots
+            try:
+                result.put((scan(roots if roots is not None else common_roots()), None))
+            except Exception as error:
+                result.put(([], str(error)))
+        threading.Thread(target=task, daemon=True).start()
+        def finish():
+            if not self.winfo_exists():
+                return
+            try:
+                self.detected, error = result.get_nowait()
+            except queue.Empty:
+                self.after(100, finish); return
+            self.scanning = False
+            self.found.delete(*self.found.get_children())
+            for i, item in enumerate(self.detected):
+                self.found.insert("", "end", iid=str(i), values=(item.kind,item.platform,item.path))
+            self.scan_status.configure(text=error or self.t("scan_done", count=len(self.detected)))
+        self.after(100, finish)
+
+    def add_detected(self):
+        for iid in self.found.selection():
+            item = self.detected[int(iid)]
+            if not any(Path(t.path).resolve() == item.path for t in self.targets):
+                self.targets.append(Target(item.kind+" · "+item.path.name,str(item.path),item.platform,item.kind))
         self.refresh()
 
     def refresh(self):

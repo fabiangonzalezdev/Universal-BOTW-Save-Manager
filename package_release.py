@@ -24,6 +24,8 @@ def package(root, target, version=__version__):
     if target=='windows-x64':binary=root/'dist'/f'{stem}.exe'
     elif target=='macos-arm64':binary=root/'dist'/f'{stem}.app'
     else:binary=root/'dist'/stem
+    versioned=root/'dist'/('v'+version)/binary.name
+    if versioned.exists():binary=versioned
     if not binary.exists():raise FileNotFoundError(f'Build the native app first: {binary}')
     bundle_name=f'{stem}-v{version}-{target}'
     release=root/'releases'/f'v{version}'

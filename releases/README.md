@@ -23,7 +23,7 @@ python -m venv .venv
 .\.venv\Scripts\python.exe package_release.py --platform windows-x64
 ```
 
-- EXE: `dist/Universal-BOTW-Save-Manager.exe`, with an embedded original sword icon.
+- EXE: `dist/v<VERSION>/Universal-BOTW-Save-Manager.exe`, with an embedded original sword icon.
 - ZIP + SHA-256 + README: `releases/v<VERSION>/`.
 - The ZIP contains one versioned application folder with the EXE, English/Spanish README, release notes, guides, icon artwork, licenses and `VERSION.txt`.
 - El ZIP contiene una carpeta de esa versión con el EXE, README en inglés/español, notas, guías, arte del icono, licencias y `VERSION.txt`.

@@ -23,6 +23,7 @@ def main():
             failures.append(str(error))
             app.destroy()
         app.report_error=fail
+        app.open_result=lambda:None
         # A synthetic native-drop payload, including spaces and Japanese path text.
         app.on_drop(SimpleNamespace(data=app.tk.call('list',str(source/'0/game_data.sav'))),'source')
         app.on_drop(SimpleNamespace(data=app.tk.call('list',str(template))),'template')

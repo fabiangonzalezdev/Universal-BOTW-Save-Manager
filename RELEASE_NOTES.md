@@ -1,15 +1,9 @@
-# Universal-BOTW-Save Manager v0.2.1-alpha.1
+# v0.3.0-alpha.1
 
-- New original sword icon embedded in the Windows EXE, application windows and macOS app bundle.
-- Editable SVG and PNG artwork included in the project and distribution.
-- Versioned ZIPs contain one application folder with the binary, English/Spanish README, release notes, guides, licenses and VERSION.txt.
-- Each release folder contains a ZIP, SHA-256 checksum and bilingual README for GitHub publication.
-- Run build_windows.ps1 to test, compile and package Windows in one command.
+- Brown cloud theme, cream header, Open Sans, and original console silhouettes in #A9905B.
+- Save-profile discovery in common emulator folders or a selected portable installation/library; each user remains a separate destination.
+- Path examples for Cemu, Ryujinx, Eden, yuzu-family emulators and Savage Wind.
+- Explicit Cemu copy confirmation for Wii U output and an offer to open the generated user-save folder.
+- Existing conversion checks, destination validation and backup-before-copy remain in place.
 
-Includes the six-language selector, conversion direction cards, native drops and optional confirmed emulator/port copying from 0.2.0.
-
-## Español
-
-Nuevo icono original de espada en el EXE y la ventana. El ZIP incluye una carpeta de la versión con aplicación, README en inglés/español, notas, guías y licencias. En releases/v0.2.1-alpha.1/ quedan el ZIP, el SHA-256 y un README para subirlos a GitHub.
-
-Builds are unsigned. Cross-version conversion is experimental; validate saves in-game. / Binarios sin firma digital. La conversión entre versiones es experimental; verificá los saves dentro del juego.
+Discovery supports validated BOTW saves, not other games yet. Searches are limited to 50,000 directories and 12 levels. Custom installations require selecting their folder. Other PC ports must use a compatible BOTW save format. No promise of detecting every installed emulator or unpublished port is made.

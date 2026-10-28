@@ -9,7 +9,7 @@ import sys
 import tempfile
 
 LANGUAGES = {"en": "English", "fr": "Français", "de": "Deutsch", "ja": "日本語", "es": "Español", "pt_BR": "Português (Brasil)"}
-KINDS = ("Ryujinx", "Eden", "Savage Wind", "Cemu", "Custom")
+KINDS = ("Ryujinx", "Eden", "Savage Wind", "Cemu", "yuzu", "suyu", "Sudachi", "Custom")
 
 
 def default_language():

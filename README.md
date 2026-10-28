@@ -100,3 +100,10 @@ The binary is generated in `dist/`. Build on the target OS; PyInstaller does not
 Original application code: MIT. The field-type table is from [Marc Robledo's savegame-editors](https://github.com/marcrobledo/savegame-editors) (MIT), with datamining credited there to MrCheeze. Format research and conversion tooling: [ZeldaMods](https://zeldamods.org/wiki/Save_Files) and [BotW Save Manager](https://github.com/DeltaJordan/BotW-Save-Manager). The latter is a reference, not bundled application code. README presentation inspired by [SavageWindRecomp](https://github.com/Revivedx/SavageWindRecomp); no branding or game assets copied. See [third-party notices](THIRD_PARTY_NOTICES.md).
 
 Independent fan utility; not affiliated with Nintendo. No game binaries, keys, firmware, personal saves or game artwork are included.
+
+
+## v0.3 interface / Interfaz v0.3
+
+Brown cloud theme, gold console icons, six languages, profile discovery and Cemu copy confirmation. / Fondo de nubes marrones, iconos dorados, seis idiomas, búsqueda de perfiles y confirmación de copia a Cemu.
+
+[Profiles and path discovery / Perfiles y búsqueda de rutas](docs/DISCOVERY.md).

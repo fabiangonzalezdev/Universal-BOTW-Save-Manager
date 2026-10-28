@@ -73,3 +73,10 @@ Incluí sistema operativo, versión de la app, versiones de BOTW de origen/desti
 Código original con licencia MIT. Tabla de tipos: [Marc Robledo](https://github.com/marcrobledo/savegame-editors), licencia MIT, con investigación de MrCheeze. Referencias: [ZeldaMods](https://zeldamods.org/wiki/Save_Files) y [BotW Save Manager](https://github.com/DeltaJordan/BotW-Save-Manager). Diseño del README inspirado en [SavageWindRecomp](https://github.com/Revivedx/SavageWindRecomp), sin copiar su arte ni marca. [Avisos de terceros](THIRD_PARTY_NOTICES.md).
 
 Proyecto independiente, sin afiliación con Nintendo. [Detalles técnicos y límites](docs/FORMAT.md).
+
+
+## v0.3 interface / Interfaz v0.3
+
+Brown cloud theme, gold console icons, six languages, profile discovery and Cemu copy confirmation. / Fondo de nubes marrones, iconos dorados, seis idiomas, búsqueda de perfiles y confirmación de copia a Cemu.
+
+[Profiles and path discovery / Perfiles y búsqueda de rutas](docs/DISCOVERY.md).

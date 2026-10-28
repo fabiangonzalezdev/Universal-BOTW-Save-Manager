@@ -13,7 +13,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Tests failed.' }
 if ($LASTEXITCODE -ne 0) { throw 'UI smoke test failed.' }
 & $python build.py
 if ($LASTEXITCODE -ne 0) { throw 'Build failed.' }
-$exe = Join-Path $PSScriptRoot 'dist\Universal-BOTW-Save-Manager.exe'
+$version = & $python -c 'from botw_manager import __version__; print(__version__)'
+$exe = Join-Path $PSScriptRoot "dist\v$version\Universal-BOTW-Save-Manager.exe"
 $p = Start-Process -FilePath $exe -ArgumentList '--self-test' -Wait -PassThru -WindowStyle Hidden
 if ($p.ExitCode -ne 0) { throw 'Packaged resources failed.' }
 & $python package_release.py --platform windows-x64
