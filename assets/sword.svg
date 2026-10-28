@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<rect x="28" y="28" width="968" height="968" rx="200" fill="#101920"/>
+<ellipse cx="512.0" cy="512.0" rx="402.0" ry="402.0" fill="#1c333d"/>
+<polygon points="510,76 594,212 568,655 512,697 456,655 430,212" fill="#83b5c6"/>
+<polygon points="510,76 514,624 462,651 447,218" fill="#e4f1f5"/>
+<polygon points="510,76 579,218 562,651 514,624" fill="#b5d4dd"/>
+<polygon points="510,110 520,218 515,601 505,601 501,218" fill="#f5fbfc"/>
+<polygon points="486,671 538,671 543,888 512,934 481,888" fill="#453a75"/>
+<polygon points="486,703 508,703 508,884 488,895" fill="#8c7bc1"/>
+<polygon points="462,639 360,574 284,605 418,711 512,685 606,711 740,605 664,574 562,639" fill="#7161ab"/>
+<polygon points="360,574 284,605 418,666 462,639" fill="#a295d3"/>
+<polygon points="664,574 740,605 606,666 562,639" fill="#9284c8"/>
+<polygon points="512,604 561,657 512,716 463,657" fill="#d8b86c"/>
+<polygon points="512,623 542,657 512,695 482,657" fill="#6de0cf"/>
+<polygon points="512,636 529,657 512,679 495,657" fill="#c5fff0"/>
+<polygon points="483,884 541,884 557,914 512,951 467,914" fill="#a295d3"/>
+<polygon points="512,905 538,916 512,939 486,916" fill="#d8b86c"/>
+<path d="M488 743L536 731" stroke="#a295d3" stroke-width="4"/>
+<path d="M488 771L536 759" stroke="#a295d3" stroke-width="4"/>
+<path d="M488 799L536 787" stroke="#a295d3" stroke-width="4"/>
+<path d="M488 827L536 815" stroke="#a295d3" stroke-width="4"/>
+<path d="M488 855L536 843" stroke="#a295d3" stroke-width="4"/>
+</svg>

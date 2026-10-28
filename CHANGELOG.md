@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.1-alpha.1 — 2026-10-28
+
+- Original sword artwork as editable SVG, PNG, multi-resolution Windows ICO and macOS ICNS.
+- Embedded EXE/application icon and native window icon.
+- Versioned distribution ZIPs with a single application folder, README, release notes, licenses and VERSION.txt.
+- Local releases/v<VERSION>/ folders contain ZIP, SHA-256 and a bilingual upload README; binaries stay out of Git.
+- One-command Windows build script and a shared native-platform packager for CI.
+
 ## 0.2.0-alpha.2 — 2026-10-28
 
 - Normalize temporary-path expectations in Windows/macOS tests (short names and /private aliases). Application path resolution remains unchanged.

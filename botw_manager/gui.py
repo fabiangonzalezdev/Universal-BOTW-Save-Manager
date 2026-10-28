@@ -25,6 +25,11 @@ class App(TkinterDnD.Tk):
     def __init__(self, config=None):
         super().__init__()
         self.title("Universal-BOTW-Save Manager")
+        icon_dir = Path(__file__).parent / "data"
+        self.app_icon = tk.PhotoImage(file=str(icon_dir / "app-icon.png"))
+        self.iconphoto(True, self.app_icon)
+        if sys.platform == "win32":
+            self.iconbitmap(default=str(icon_dir / "app-icon.ico"))
         width, height = min(1100, self.winfo_screenwidth()-70), min(960, self.winfo_screenheight()-90)
         self.geometry(f"{width}x{height}")
         self.minsize(860, 640)
@@ -564,6 +569,11 @@ def main():
     if args.self_test:
         from .core import TYPES
         from .i18n import CATALOGS
+        icon_dir = Path(__file__).parent / "data"
+        if not (icon_dir / "app-icon.ico").read_bytes().startswith(b"\x00\x00\x01\x00"):
+            raise RuntimeError("Bundled Windows icon is missing")
+        if not (icon_dir / "app-icon.png").read_bytes().startswith(b"\x89PNG"):
+            raise RuntimeError("Bundled window icon is missing")
         if TYPES.get(0x5F283289) != 16 or len(CATALOGS) != 6:
             raise RuntimeError("Bundled resources are missing")
         return

@@ -25,6 +25,6 @@ if ($LASTEXITCODE -ne 0) {
 }
 if ($LASTEXITCODE -ne 0) { throw 'Repository publication failed.' }
 if (-not $SkipRelease) {
-    & $gh.Source release create v0.2.0-alpha.2 --repo $repo --target main --prerelease --title 'Universal-BOTW-Save Manager v0.2.0-alpha.2' --notes-file RELEASE_NOTES.md 'dist/Universal-BOTW-Save-Manager-windows-x64.zip' 'dist/Universal-BOTW-Save-Manager-windows-x64.sha256'
+    & $gh.Source release create v0.2.1-alpha.1 --repo $repo --target main --prerelease --title 'Universal-BOTW-Save Manager v0.2.1-alpha.1' --notes-file RELEASE_NOTES.md 'releases/v0.2.1-alpha.1/Universal-BOTW-Save-Manager-v0.2.1-alpha.1-windows-x64.zip' 'releases/v0.2.1-alpha.1/Universal-BOTW-Save-Manager-v0.2.1-alpha.1-windows-x64.sha256'
     if ($LASTEXITCODE -ne 0) { throw 'Release publication failed. Check existing releases before retrying.' }
 }

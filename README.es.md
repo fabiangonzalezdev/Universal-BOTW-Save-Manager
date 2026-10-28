@@ -7,6 +7,10 @@
 > [!IMPORTANT]
 > Primera versión alfa, desarrollada con asistencia de IA y dirección humana. Las pruebas automáticas verifican archivos y conservación de valores; falta validación dentro del juego en consolas físicas. «Universal» es el nombre del proyecto, no una garantía de compatibilidad con cualquier versión o mod.
 
+## Compilar EXE y ZIP con el icono de espada
+
+El arte original está en `assets/sword.svg`. El EXE incluye un ICO con varios tamaños y la ventana usa la misma espada. Ejecutá `build_windows.ps1` para probar, compilar y generar el ZIP con documentación y SHA-256 en `releases/v<VERSION>/`. [Guía de la carpeta de releases](releases/README.md).
+
 ## Primeros pasos
 
 En el selector aparecen **English, Français, Deutsch, 日本語, Español y Português (Brasil)**. Elegí un idioma y la tarjeta **Wii U → Switch** o **Switch → Wii U**. La elección del idioma se guarda localmente. Podés arrastrar un save de un respaldo completo sobre cada entrada o elegirlo con los botones.

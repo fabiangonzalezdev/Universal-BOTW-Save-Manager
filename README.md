@@ -24,6 +24,10 @@ Convert **Wii U → Switch** or **Switch → Wii U** using a native backup from 
 > [!WARNING]
 > Cross-version conversion is **experimental and disabled by default**. The five identified newer Switch fields can be removed when absent from the destination, or initialized from the destination template when missing from the source. Other schema differences are rejected. Neither a successful conversion nor a matching header proves that the game will load the save.
 
+## Building an EXE with the sword icon
+
+The app uses original sword artwork in `assets/sword.svg`. Windows builds embed a multi-resolution ICO; the same artwork appears in the app window and the macOS bundle. Run `build_windows.ps1` to test, compile and create a versioned ZIP with documentation and a SHA-256 file. Outputs are in `releases/v<VERSION>/`. See the [release folder guide](releases/README.md).
+
 ## Getting started
 
 Choose your language in the dropdown, then select one of the two conversion cards. You can choose a folder or drop a save from a complete backup onto either input.

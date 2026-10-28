@@ -48,37 +48,28 @@ jobs:
       - name: Verify packaged Linux resources
         if: runner.os == 'Linux'
         run: ./dist/Universal-BOTW-Save-Manager --self-test
-      - name: Archive
-        shell: python
-        run: |
-          import hashlib, pathlib, shutil
-          suffix = '${{ matrix.platform }}'
-          release = pathlib.Path('release'); release.mkdir(exist_ok=True)
-          app = pathlib.Path('dist')
-          for file in ['README.md', 'README.es.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md']:
-              shutil.copy(file, app / file)
-          shutil.copytree('docs', app/'docs', dirs_exist_ok=True)
-          notices = app/'third-party-licenses'; notices.mkdir(exist_ok=True)
-          for license in pathlib.Path('botw_manager/data').glob('LICENSE.*'):
-              shutil.copy(license, notices/license.name)
-          name = f'Universal-BOTW-Save-Manager-{suffix}'
-          archive = pathlib.Path(shutil.make_archive(str(release/name), 'zip', app))
-          (release/f'{name}.sha256').write_text(hashlib.sha256(archive.read_bytes()).hexdigest()+'  '+archive.name+'\n')
+      - name: Package versioned release
+        run: python package_release.py --platform ${{ matrix.platform }}
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.platform }}
-          path: release/*
+          path: |
+            releases/**/*.zip
+            releases/**/*.sha256
   release:
     needs: build
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-          path: release
+          path: release-assets
           merge-multiple: true
       - uses: softprops/action-gh-release@v2
         with:
           prerelease: true
-          generate_release_notes: true
-          files: release/*
+          body_path: RELEASE_NOTES.md
+          files: |
+            release-assets/**/*.zip
+            release-assets/**/*.sha256

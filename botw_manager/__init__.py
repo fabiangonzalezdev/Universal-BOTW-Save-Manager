@@ -1,2 +1,2 @@
 """Universal-BOTW-Save Manager."""
-__version__ = "0.2.0-alpha.2"
+__version__ = "0.2.1-alpha.1"

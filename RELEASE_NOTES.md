@@ -1,21 +1,15 @@
-# Universal-BOTW-Save Manager v0.2.0-alpha.2
+# Universal-BOTW-Save Manager v0.2.1-alpha.1
 
-## New
+- New original sword icon embedded in the Windows EXE, application windows and macOS app bundle.
+- Editable SVG and PNG artwork included in the project and distribution.
+- Versioned ZIPs contain one application folder with the binary, English/Spanish README, release notes, guides, licenses and VERSION.txt.
+- Each release folder contains a ZIP, SHA-256 checksum and bilingual README for GitHub publication.
+- Run build_windows.ps1 to test, compile and package Windows in one command.
 
-- Language dropdown with native names: English, Français, Deutsch, 日本語, Español, Português (Brasil). The selected language is remembered locally.
-- Two conversion cards with original Wii U/Switch schematic icons and explicit Wii U → Switch / Switch → Wii U directions.
-- Choose a backup folder or drop a save file from a complete backup onto either input.
-- Separate conversion and copying progress/status indicators.
-- Settings → Other paths: Ryujinx, Eden, Savage Wind, Cemu and custom save destinations.
-- Optional post-conversion copying, only after confirmation, to enabled targets with matching formats. Savage Wind game folders resolve to `save/` when present.
-- Prior target folders are retained as timestamped sibling backups; staged writes, hash checks and rollback protect replacements. Reports record each result. No automatic backup deletion.
-
-## Validation and limits
-
-Synthetic conversion/copy regression tests and an end-to-end GUI test exercise languages, direction changes, dropped paths, settings dialogs and confirmed copying using temporary saves. The Windows binary includes native drag-and-drop support. Platform-specific CI results and artifacts are available in Actions.
-
-Physical-console and real port gameplay validation are still required. Cross-version conversion remains experimental. This release does not edit player stats, access Nintendo Cloud or install CFW. Binaries are unsigned.
+Includes the six-language selector, conversion direction cards, native drops and optional confirmed emulator/port copying from 0.2.0.
 
 ## Español
 
-Selector de seis idiomas, tarjetas Wii U ↔ Switch, arrastrar saves, configuración de destinos y copia opcional con barra independiente. Antes de copiar, se muestran los destinos y se pide confirmación. Los saves anteriores quedan respaldados junto a cada destino. No se copiaron ni modificaron los juegos instalados del usuario durante el desarrollo.
+Nuevo icono original de espada en el EXE y la ventana. El ZIP incluye una carpeta de la versión con aplicación, README en inglés/español, notas, guías y licencias. En releases/v0.2.1-alpha.1/ quedan el ZIP, el SHA-256 y un README para subirlos a GitHub.
+
+Builds are unsigned. Cross-version conversion is experimental; validate saves in-game. / Binarios sin firma digital. La conversión entre versiones es experimental; verificá los saves dentro del juego.

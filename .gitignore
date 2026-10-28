@@ -3,6 +3,8 @@ __pycache__/
 *.pyc
 build/
 dist/
+/releases/**/*.zip
+/releases/**/*.sha256
 *.spec
 _local/
 *.sav
